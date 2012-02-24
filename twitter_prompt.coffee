@@ -45,8 +45,7 @@ streaming = ->
                         if tweet.text?
                             console.log tweet.user.screen_name + ': ' + tweet.text
                             collection.insert(tweet, {safe:true}, (err, result) ->
-                                if (!err)
-                                    console.log(err)
+                                assert.equal(null, err)
                             )
                         else if tweet.limit?
                             console.log tweetText
