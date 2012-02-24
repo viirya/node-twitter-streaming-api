@@ -13,7 +13,9 @@
   "dependencies": {
     "underscore":"latest",
     "cli":"latest",
-    "line-parser":"latest"
+    "line-parser":"latest",
+    "prompt":"latest",
+    "mongodb":"latest"
   },
   "devDependencies": {}
 }
