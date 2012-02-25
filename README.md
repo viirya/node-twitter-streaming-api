@@ -1,4 +1,3 @@
-
 # Extending Twitter Streaming API Sample
 
 This program extends [mthomas/node-twitter-streaming-api](https://github.com/mthomas/node-twitter-streaming-api) that is a sample of using the twitter streaming API with Node.js, written in Coffeescript.
@@ -15,7 +14,7 @@ To run:
 
 * npm install coffee-script -g
 * npm install
-* coffee twitter_prompt.coffee-t comma,separated,words,to,track
+* coffee twitter_prompt.coffee -t comma,separated,words,to,track
 
 
 
