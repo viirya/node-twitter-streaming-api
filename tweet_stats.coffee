@@ -9,7 +9,8 @@ lazy    = require("lazy")
 
 options = cli.parse
   filename: ['f', 'The filename to parse', 'string']
-
+  outfile: ['o', 'The output filename', 'string']
+ 
 hash = {}
 
 new lazy(fs.createReadStream(options.filename))
@@ -32,7 +33,14 @@ new lazy(fs.createReadStream(options.filename))
         else
             hash[day + hour + min] = 1    
     ).on('end', ->
-        console.log(hash)
+        #console.log(hash)
+ 
+        fs.createWriteStream(options.outfile).on('open', (fd) ->
+            for time, tweet of hash
+                console.log(time + ": " + tweet)                    
+                this.write(time + "\t" + tweet + "\n")
+        )
+        
     )
     
 
