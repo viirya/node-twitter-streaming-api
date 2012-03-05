@@ -32,7 +32,7 @@ query = ->
                 
                 db.collection('twitter_linsanity_nba', (err, collection) ->
 
-                    stream = collection.find({}, {id_str: true, created_at: true}).sort({created_at: 1}).streamRecords();
+                    stream = collection.find({}, {id_str: true, created_at: true}).sort({id: 1}).streamRecords();
 
                     tweet_count = 0
                     tweet_messages = ""
