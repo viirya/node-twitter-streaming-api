@@ -2,6 +2,7 @@
 Buffer = require('buffer').Buffer
 EventEmitter = require('events').EventEmitter
 _ = require('underscore')
+cli = require('cli')
 prompt = require('prompt')
 mongo = require('mongodb')
 assert = require('assert')
@@ -10,6 +11,8 @@ fs = require('fs')
 Server = mongo.Server
 Db = mongo.Db
 
+options = cli.parse
+  outfile: ['o', 'The output filename', 'string']
 
 db_options =
     db_username: no
@@ -29,19 +32,19 @@ query = ->
                 
                 db.collection('twitter_linsanity_nba', (err, collection) ->
 
-                    stream = collection.find({}, {created_at: true}).sort({created_at: 1}).streamRecords();
+                    stream = collection.find({}, {id_str: true, created_at: true}).sort({created_at: 1}).streamRecords();
 
                     tweet_count = 0
                     tweet_messages = ""
                     stream.on("data", (item) ->
                         console.log(item.created_at)
                         tweet_count++
-                        tweet_messages += item.created_at + "\n"
+                        tweet_messages += item.created_at + " : " + item.id_str + "\n"
                     )
 
                     stream.on("end", ->
                         console.log("total: " + tweet_count + " tweets")
-                        fs.writeFile("tweet_distribution.txt", tweet_messages, (err) ->
+                        fs.writeFile(options.outfile, tweet_messages, (err) ->
                             if (err)
                                 throw err
                             process.exit()
