@@ -34,7 +34,7 @@ mean = (tweets, slot_number) ->
 std = (tweets, mean_value, slot_number) ->
     ret = 0
     #for own index, number of tweets
-    for index in [0..slot_number - 1]
+    for own index in [0..slot_number - 1]
         value = 0
         if (tweets[index]?)
             value = tweets[index]
@@ -102,7 +102,7 @@ new lazy(fs.createReadStream(options.filename))
                     console.log("highlight detected.")
                     highlights[pre_slot] = tweet_ids
 
-                    for tweet in tweets
+                    for own tweet in tweets
                         index = tweet.day + tweet.hour + tweet.min
                         if (hash[index])
                             hash[index]++
@@ -119,15 +119,15 @@ new lazy(fs.createReadStream(options.filename))
         fs.createWriteStream(options.outfile).on('open', (fd) ->
             highlight_count = 0
 
-            for slot_number, tweet_ids of highlights
-                for tweet_id in tweet_ids
+            for own slot_number, tweet_ids of highlights
+                for own tweet_id in tweet_ids
                     console.log("highlight: " + highlight_count + "\t" + tweet_id + "\n")                    
                     this.write("highlight: " + highlight_count + "\t" + tweet_id + "\n")
                 highlight_count++
         )
 
         fs.createWriteStream(options.highlight_outfile).on('open', (fd) ->
-            for time, tweet of hash
+            for own time, tweet of hash
                 console.log(time + ": " + tweet)
                 this.write(time + "\t" + tweet + "\n")
         )
