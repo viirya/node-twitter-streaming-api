@@ -87,7 +87,7 @@ new lazy(fs.createReadStream(options.filename))
 
         assert.equal(true, slot >= 0)
 
-        if (tweet_number[slot])
+        if (tweet_number[slot]?)
             tweet_number[slot]++
             pre_slot = slot
             tweet_ids.push(tweet.id)

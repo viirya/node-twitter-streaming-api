@@ -16,6 +16,22 @@ To run:
 * npm install
 * coffee twitter_prompt.coffee -t comma,separated,words,to,track
 
+# Generate tweet distribution
 
+coffee tweet_distribution.coffee -o tweet_distribution.txt
+
+# Detect bursts in tweets as highlights
+
+coffee tweet_burst.coffee -f tweet_distribution.txt -o tweet_highlight.txt -h tweet_highlight_distribution.txt 
+
+# Generate statistic for tweet
+
+coffee tweet_stats.coffee -f tweet_distribution.txt -o tweet_2012_2_24_nba.txt
+
+coffee tweet_stats.coffee -f tweet_distribution.txt -o tweet_2012_2_24_nba_highlight.txt -h tweet_highlight.txt
+
+# Fetch tweet text for highlights
+
+coffee tweet_highlight_fetch.coffee -h tweet_highlight.txt
 
 

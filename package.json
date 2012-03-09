@@ -16,7 +16,8 @@
     "line-parser":"latest",
     "prompt":"latest",
     "mongodb":"latest",
-    "lazy":"latest"
+    "lazy":"latest",
+    "natural": "latest"
   },
   "devDependencies": {}
 }

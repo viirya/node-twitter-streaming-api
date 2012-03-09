@@ -9,6 +9,11 @@ lazy    = require("lazy")
 prompt = require('prompt')
 mongo = require('mongodb')
 
+Object.prototype.size = () ->
+    len = if this.length then --this.length else -1
+    len++ for own k of this
+    return len
+
 options = cli.parse
     highlight_file: ['h', 'The highlight filename', 'string']
     outfile: ['o', 'The output filename', 'string']
@@ -36,19 +41,47 @@ run = () ->
 
                 db.collection('twitter_linsanity_nba', (err, collection) ->
 
-                    for highlight_id, tweet_ids of highlight_tweets
-                        for tweet_id in tweet_ids
+                    # for highlight_id, tweet_ids of highlight_tweets
+                        # for tweet_id in tweet_ids
 
-                            stream = collection.find({id_str: tweet_id}, {text: true}).streamRecords();
-                            stream.on("data", (item) ->
+                    console.log('hightlight: ', highlight_tweets.size())
 
-                                console.log(item.text)
+                    write_output = ->
+                        console.log('writing to output file.')
+                        fs.createWriteStream(options.outfile).on('open', (fd) ->
+                            for own highlight_id, tweets of highlight_tweet_content
+                                for own tweet in tweets
+                                    # console.log("highlight: " + highlight_id + "\t" + tweet + "\n")
+                                    this.write("highlight: " + highlight_id + "\t" + tweet + "\n")
+                            process.exit()
+                        )
 
-                                if (!highlight_tweet_content[highlight_id]?)
-                                    highlight_tweet_content[highlight_id] = []
 
-                                highlight_tweet_content[highlight_id].push(item.text)
-                            )
+                    highlight_index = 0
+                    set_stream_events = (coll, tweets, h_index) ->
+                        stream = coll.find({id_str: {$in: tweets}}, {text: true}).stream();
+                        stream.on("data", (item) ->
+                        
+                            # console.log(item.text)
+                        
+                            if (!highlight_tweet_content[h_index]?)
+                                highlight_tweet_content[h_index] = []
+                        
+                            highlight_tweet_content[h_index].push(item.text)
+                        )
+                        stream.on("close", ->
+                            h_index++
+                            h_index++ until highlight_tweets[h_index]? || h_index > highlight_tweets.size()
+                            if (highlight_tweets[h_index]?)
+                                set_stream_events(coll, highlight_tweets[h_index], h_index)
+                            else
+                                console.log('fetch done')
+                                console.log('events: ' + highlight_tweet_content.size())
+                                write_output()
+                                    
+                        )
+
+                    set_stream_events(collection, highlight_tweets[highlight_index], highlight_index)
 
                 )
             )
